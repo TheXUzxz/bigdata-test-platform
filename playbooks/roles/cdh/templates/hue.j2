@@ -1,0 +1,50 @@
+{
+  "refName": "hue",
+  "serviceType": "HUE",
+  "serviceConfigs": [
+    {
+      "name": "database_host",
+      "value": "{{ hostvars[cloudera.config.db_hostname]['inventory_hostname'] }}"
+    }, {
+      "name": "database_type",
+      "value": "{{ databases.hue.type }}"
+    }, {
+      "name": "database_name",
+      "value": "{{ databases.hue.name }}"
+    }, {
+      "name": "database_user",
+      "value": "{{ databases.hue.user }}"
+    }, {
+      "name": "database_password",
+      "value": "{{ databases.hue.pass }}"
+    }, {
+      "name": "hive_service",
+      "ref": "hive"
+    }, {
+      "name": "oozie_service",
+      "ref": "oozie",
+      "autoConfig": true
+    }, {
+      "name": "hbase_service",
+      "ref": "hbase",
+      "autoConfig": true
+    }, {
+      "name": "zookeeper_service",
+      "ref": "zookeeper",
+      "autoConfig": true
+    }
+  ],
+  "roleConfigGroups": [
+    {
+      "refName": "hue-HUE_SERVER-BASE",
+      "roleType": "HUE_SERVER",
+      "configs": [],
+      "base": true
+    }, {
+      "refName": "hue-HUE_LOAD_BALANCER-BASE",
+      "roleType": "HUE_LOAD_BALANCER",
+      "configs": [],
+      "base": true
+    }
+  ]
+}

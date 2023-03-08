@@ -1,0 +1,32 @@
+---
+
+- name: Install version-locked squid
+  yum:
+    name: "{{ common.config.squid.version }}"
+    state: installed
+    disablerepo: "*"
+    enablerepo: "thexu-locally"
+
+- name: Ensure caching directory exists
+  file:
+    path: "{{ common.config.squid.cache_directory }}"
+    state: directory
+    mode: 750
+    owner: squid
+    group: squid
+
+- name: Copy squid.conf template
+  template:
+    src: squid.conf.j2
+    dest: /etc/squid/squid.conf
+    owner: root
+    group: root
+    mode: 644
+  notify: 
+    - Restart squid
+
+- name: Start and chkconfig squid
+  service:
+    name: squid
+    state: started
+    enabled: true

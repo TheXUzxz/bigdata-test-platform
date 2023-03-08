@@ -1,0 +1,16 @@
+---
+
+- name: Restart cloudera-scm-server
+  service:
+    name: cloudera-scm-server
+    state: restarted
+  notify:
+    - Wait cloudera-scm-server
+
+- name: Wait cloudera-scm-server
+  wait_for:
+    host: "{{ hostvars[cloudera.config.scm_hostname]['inventory_hostname'] }}"
+    port: "{{ cloudera.config.scm_port }}"
+    delay: 5
+    state: started
+    timeout: 3000

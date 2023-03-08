@@ -1,0 +1,29 @@
+---
+
+- name: Install dependencies
+  yum:
+    name: oracle-j2sdk1.8
+    state: installed
+    disablerepo: "*"
+    enablerepo: "thexu-locally"
+
+- name: Add java symlinks
+  block:
+    - name: Find java home dir
+      find:
+        paths: /usr/java
+        patterns: 'jdk*-cloudera'
+        file_type: directory
+        recurse: no
+      register: cloudera_jdk_home
+    - name: Create alternatives symlinks for java
+      alternatives:
+        name: java
+        link: /usr/bin/java
+        path: "{{ cloudera_jdk_home.files[0].path }}/bin/java"
+      when: cloudera_jdk_home.matched
+    - name: Create default symlink for java home directory
+      file:
+        src: "{{ cloudera_jdk_home.files[0].path }}"
+        dest: /usr/java/default
+        state: link

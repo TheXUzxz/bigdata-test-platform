@@ -1,0 +1,50 @@
+{
+  "refName": "hdfs",
+  "serviceType": "HDFS",
+  "serviceConfigs": [
+    {
+      "name": "dfs_permissions",
+      "value": "false"
+    }
+  ],
+  "roleConfigGroups": [
+    {
+      "refName": "hdfs-NAMENODE-BASE",
+      "roleType": "NAMENODE",
+      "base": true,
+      "configs": [
+        {
+          "name": "dfs_name_dir_list",
+          "variable": "DFS_NAME_DIR_LIST"
+        }
+      ]
+    },
+    {
+      "refName": "hdfs-SECONDARYNAMENODE-BASE",
+      "roleType": "SECONDARYNAMENODE",
+      "base": true,
+      "configs": [
+        {
+          "name": "fs_checkpoint_dir_list",
+          "variable": "FS_CHECKPOINT_DIR_LIST"
+        }
+      ]
+    },
+    {
+      "refName": "hdfs-DATANODE-BASE",
+      "roleType": "DATANODE",
+      "base": true,
+      "configs": [
+        {
+          "name": "dfs_data_dir_list",
+          "variable": "DFS_DATA_DIR_LIST"
+        }
+      ]
+    },
+    {
+      "refName": "hdfs-BALANCER-BASE",
+      "roleType": "BALANCER",
+      "base": true
+    }
+  ]
+}

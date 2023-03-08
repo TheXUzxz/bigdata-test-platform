@@ -1,0 +1,68 @@
+{
+  "refName": "yarn",
+  "serviceType": "YARN",
+  "serviceConfigs": [
+    {
+      "name": "cm_yarn_container_usage_job_user",
+      "value": "cmjobuser"
+    }, {
+      "name": "hdfs_service",
+      "ref": "hdfs"
+    }, {
+      "name": "hadoop_secure_web_ui",
+      "value": "true"
+    }, {
+      "name": "cm_yarn_enable_container_usage_aggregation",
+      "value": "true"
+    }
+  ],
+  "roleConfigGroups": [
+    {
+      "refName": "yarn-JOBHISTORY-BASE",
+      "roleType": "JOBHISTORY",
+      "configs": [],
+      "base": true
+    }, {
+      "refName": "yarn-NODEMANAGER-BASE",
+      "roleType": "NODEMANAGER",
+      "configs": [
+        {
+          "name": "yarn_nodemanager_local_dirs",
+          "variable": "YARN_NODEMANAGER_LOCAL_DIRS"
+        },
+        {
+          "name": "yarn_nodemanager_log_dirs",
+          "variable": "YARN_NODEMANAGER_LOG_DIRS"
+        },
+        {
+          "name": "yarn_nodemanager_resource_memory_mb",
+          "value": "4096"
+        },
+        {
+          "name": "yarn_nodemanager_resource_cpu_vcores",
+          "value": "4"
+        }
+      ],
+      "base": true
+    }, {
+      "refName": "yarn-RESOURCEMANAGER-BASE",
+      "roleType": "RESOURCEMANAGER",
+      "configs": [
+        {
+          "name": "yarn_scheduler_maximum_allocation_vcores",
+          "value": "1",
+          "autoConfig": true
+        },
+        {
+          "name": "yarn_scheduler_minimum_allocation_mb",
+          "value": "200"
+        },
+        {
+          "name": "yarn_scheduler_maximum_allocation_mb",
+          "value": "2048"
+        }
+      ],
+      "base": true
+    }
+  ]
+}

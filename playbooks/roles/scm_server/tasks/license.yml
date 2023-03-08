@@ -1,0 +1,15 @@
+---
+
+- name: Begin Cloudera Manager trial license
+  uri:
+    url: "{{ cm_api_url }}/cm/trial/begin"
+    method: POST
+    # Supported Status codes:
+    # 204: when posting trial/begin (the 1.time)
+    # 400: when posting trial/begin after trial has begun 
+    status_code: 200,204,400
+    force_basic_auth: yes
+    user: "{{ cloudera.config.scm_default_user }}"
+    password: "{{ cloudera.config.scm_default_password }}"
+  notify:
+    - Restart cloudera-scm-server

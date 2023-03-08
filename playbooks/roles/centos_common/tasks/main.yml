@@ -1,0 +1,30 @@
+---
+
+- name: Create cache dir
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0775
+  with_items:
+    - "{{ common.path.temp_install }}"
+
+- include: install_tools.yml
+
+- include: install_rng.yml
+
+# - include: install_epel.yml
+
+- include: disable_selinux.yml
+
+- include: disable_firewall.yml
+
+- include: set_limits.yml
+
+- include: set_time.yml
+
+- include: set_locale.yml
+
+- include: install_mysql_connector.yml
+
+# 在生产环境下, 此处还需要挂载 NameNode, DataNode, MySQL, Services 等的磁盘
+# 同样的, 在生产环境下, 还应该配置 raid

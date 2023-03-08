@@ -1,0 +1,30 @@
+[ {
+  "refName": "HostTemplate-Master",
+  "cardinality": 1,
+  "roleConfigGroupsRefNames": [
+    "hbase-HBASETHRIFTSERVER-BASE",
+    "hbase-MASTER-BASE",
+    "hdfs-BALANCER-BASE",
+    "hdfs-NAMENODE-BASE",
+    "hdfs-SECONDARYNAMENODE-BASE",
+    "hive-HIVEMETASTORE-BASE",
+    "hive-HIVESERVER2-BASE",
+    "hue-HUE_SERVER-BASE",
+    "oozie-OOZIE_SERVER-BASE",
+    "solr-SOLR_SERVER-BASE",
+    "spark_on_yarn-SPARK_YARN_HISTORY_SERVER-BASE",
+    "yarn-JOBHISTORY-BASE",
+    "yarn-RESOURCEMANAGER-BASE",
+    "zookeeper-SERVER-BASE"
+  ]
+}, {
+  "refName": "HostTemplate-Workers",
+  "cardinality": 2,
+  "roleConfigGroupsRefNames": [
+    "hbase-REGIONSERVER-BASE",
+    "hdfs-DATANODE-BASE",
+    "yarn-NODEMANAGER-BASE" ,
+    "hive-GATEWAY-BASE",
+    "spark_on_yarn-GATEWAY-BASE"
+  ]
+} ]

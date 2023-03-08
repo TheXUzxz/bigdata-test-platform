@@ -1,0 +1,50 @@
+---
+
+- name: Wait for agent heartbeats
+  pause:
+    seconds: 30
+
+- name: Prepare cms template
+  template:
+    src: "cms_base.j2"
+    dest: "{{ common.path.temp_install }}/cms_base.json"
+  delegate_to: localhost
+
+- name: Setup the Cloudera Management Services (CMS)
+  uri:
+    url: "{{ cm_api_url }}/cm/service"
+    method: PUT
+    body_format: json
+    body: "{{ lookup('file', ''+ common.path.temp_install + '/cms_base.json') }}"
+    status_code: 200,400
+    force_basic_auth: yes
+    user: "{{ cloudera.config.scm_default_user }}"
+    password: "{{ cloudera.config.scm_default_password }}"
+    return_content: yes
+  register: cms_resp
+  failed_when:
+    - "'MGMT' not in cms_resp.content"
+    - "'CMS instance already exists' not in cms_resp.content"
+  delegate_to: localhost
+
+- name: Debug cms_resp
+  debug:
+    var: cms_resp
+    verbosity: 1
+
+- name: Start Cloudera Management Services (CMS)
+  uri:
+    url: "{{ cm_api_url }}/cm/service/commands/start"
+    method: POST
+    status_code: "200"
+    force_basic_auth: yes
+    user: "{{ cloudera.config.scm_default_user }}"
+    password: "{{ cloudera.config.scm_default_password }}"
+    return_content: yes
+  register: start_resp
+  failed_when: "'startTime' not in start_resp.content"
+
+- name: Debug start_resp
+  debug:
+    var: start_resp
+    verbosity: 1

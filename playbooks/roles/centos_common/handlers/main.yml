@@ -1,0 +1,16 @@
+- name: Run update-grub
+  shell: cd && grub2-mkconfig -o "$(readlink -n /etc/grub2.cfg)"
+  when: ansible_distribution_major_version == "7"
+
+- name: Reload firewalld
+  command: firewall-cmd --reload
+
+- name: Restart rngd
+  service:
+    name: rngd
+    state: restarted
+
+- name: Restart squid
+  service:
+    name: squid
+    state: restarted

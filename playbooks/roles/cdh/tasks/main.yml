@@ -1,0 +1,96 @@
+---
+
+- name: Get Cloudera Manager API version
+  uri:
+    url: http://{{ hostvars[cloudera.config.scm_hostname]['inventory_hostname'] }}:{{ cloudera.config.scm_port }}/api/version
+    method: GET
+    status_code: "200"
+    user: "{{ cloudera.config.scm_default_user }}"
+    password: "{{ cloudera.config.scm_default_password }}"
+    force_basic_auth: yes
+    return_content: yes
+  register: result
+  until: result.status == 200
+  retries: 10
+  delay: 60
+
+- name: Set base CM API URL
+  set_fact:
+    cm_api_url: "http://{{ hostvars[cloudera.config.scm_hostname]['inventory_hostname'] }}:{{ cloudera.config.scm_port }}/api/{{ result.content }}"
+
+- name: Check whether cluster exists
+  uri:
+    url: "{{ cm_api_url }}/clusters/{{ cloudera.config.cluster_display_name }}"
+    method: GET
+    status_code: 200,404
+    force_basic_auth: yes
+    user: "{{ cloudera.config.scm_default_user }}"
+    password: "{{ cloudera.config.scm_default_password }}"
+    return_content: yes
+  register: clusters_resp
+
+- name: Set variable cluster exists
+  set_fact:
+    cluster_exists: "{{ 'True' if clusters_resp.status == 200 else 'False' }}"
+
+- name: Discover cdh base config
+  set_fact:
+    cluster_template_json: "{{ lookup('template', 'base.j2', convert_data=False) }}"
+  when: not cluster_exists
+
+- name: Debug cluster template json
+  debug:
+    var: cluster_template_json
+    verbosity: 1
+
+- name: Remove namenode dir
+  file:
+    path: /dfs/nn
+    state: absent
+
+- name: Import cluster template
+  uri:
+    url: "{{ cm_api_url }}/cm/importClusterTemplate?addRepositories=true"
+    method: POST
+    body_format: json
+    body: "{{ cluster_template_json|to_json }}"
+    status_code: "200"
+    force_basic_auth: yes
+    user: "{{ cloudera.config.scm_default_user }}"
+    password: "{{ cloudera.config.scm_default_password }}"
+    return_content: yes
+  register: template_resp
+  when: not cluster_exists
+
+- name: Save import command id
+  set_fact:
+    command_id: "{{ template_resp.json.id }}"
+  when: not cluster_exists
+
+- name: Wait for import cluster template command to complete
+  uri: 
+    url: "{{ cm_api_url }}/commands/{{ command_id }}"
+    body_format: json
+    force_basic_auth: yes
+    user: "{{ cloudera.config.scm_default_user }}"
+    password: "{{ cloudera.config.scm_default_password }}"
+    return_content: yes
+  register: result
+  until: not result.json.active
+  retries: 30
+  delay: 60
+  when: not cluster_exists
+  failed_when: "'Failed to import cluster template' in result.content"
+
+- name: Restart Cloudera Management Service
+  uri:
+    url: "{{ cm_api_url }}/cm/service/commands/restart"
+    method: POST
+    status_code: "200"
+    force_basic_auth: yes
+    user: "{{ cloudera.config.scm_default_user }}"
+    password: "{{ cloudera.config.scm_default_password }}"
+    return_content: yes
+  register: start_resp
+  failed_when: "'startTime' not in start_resp.content"
+  when: not cluster_exists

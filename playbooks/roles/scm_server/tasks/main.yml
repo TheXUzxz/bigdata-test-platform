@@ -1,0 +1,80 @@
+---
+
+- name: Install dependencies
+  yum:
+    name: "{{ item }}"
+    state: present
+    disablerepo: "*"
+    enablerepo: "thexu-locally"
+  with_items:
+    - cloudera-manager-daemons
+    - cloudera-manager-server-db-2
+    - cloudera-manager-server
+
+- name: Install openldap
+  yum:
+    name: openldap-clients
+    state: installed
+    disablerepo: "*"
+    enablerepo: "thexu-locally"
+  
+- name: Prepare external database
+  command: |
+    /opt/cloudera/cm/schema/scm_prepare_database.sh -f
+    --host {{ hostvars[cloudera.config.db_hostname]['inventory_hostname'] }}
+    {{ database_type }} {{ databases.scm.name }} {{ databases.scm.user }} {{ databases.scm.pass }}
+
+- name: Start the scm server
+  service:
+    name: "{{ item }}"
+    state: started
+    enabled: yes
+  notify:
+    - Wait cloudera-scm-server
+  with_items:
+    - cloudera-scm-server
+    - cloudera-scm-agent
+
+- name: Get Cloudera Manager API version
+  uri:
+    url: http://{{ hostvars[cloudera.config.scm_hostname]['inventory_hostname'] }}:{{ cloudera.config.scm_port }}/api/version
+    method: GET
+    status_code: "200"
+    user: "{{ cloudera.config.scm_default_user }}"
+    password: "{{ cloudera.config.scm_default_password }}"
+    force_basic_auth: yes
+    return_content: yes
+  register: result
+  until: result.status == 200
+  retries: 10
+  delay: 60
+
+- name: Set base CM API URL
+  set_fact:
+    cm_api_url: "http://{{ hostvars[cloudera.config.scm_hostname]['inventory_hostname'] }}:{{ cloudera.config.scm_port }}/api/{{ result.content }}"
+
+- name: Get the host identifiers and names from Cloudera Manager
+  uri:
+    url: "{{ cm_api_url }}/hosts"
+    method: GET
+    status_code: "200"
+    user: "{{ cloudera.config.scm_default_user }}"
+    password: "{{ cloudera.config.scm_default_password }}"
+    force_basic_auth: yes
+    return_content: yes
+  register: scm_host_list
+
+- name: Extract the host identifiers and names into facts
+  set_fact:
+    scm_hosts: "{{ lookup('template', 'scm_host_list.j2') | from_yaml }}"
+
+- name: Print the extracted host identifiers and names
+  debug:
+    var: scm_hosts
+    verbosity: 1
+
+- include: license.yml
+
+- include: scm.yml
+
+# - include: cms.yml

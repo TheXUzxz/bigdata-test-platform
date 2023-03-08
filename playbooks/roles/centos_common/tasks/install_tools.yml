@@ -1,0 +1,34 @@
+---
+
+- name: Install base tools
+  yum:
+    name:
+    - zip
+    - wget
+    - python-simplejson
+    - python-httplib2
+    - man
+    - man-pages
+    - vim-enhanced
+    - sysstat
+    - lsof
+    - jwhois
+    - telnet
+    - nc
+    - libselinux-python
+    - ntpdate
+    - chrony
+    - parted
+    - mc
+    - perl
+    - openssh-clients
+    - util-linux-ng
+    - iotop
+    - links
+    - unzip
+    - curl
+    - wget
+    - xfsprogs
+    disablerepo: "*"
+    enablerepo: "thexu-locally"
+    state: installed

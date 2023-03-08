@@ -1,0 +1,28 @@
+{
+  "refName": "hbase",
+  "serviceType": "HBASE",
+  "serviceConfigs": [
+    {
+      "name": "hdfs_service",
+      "ref": "hdfs"
+    }
+  ],
+  "roleConfigGroups": [
+    {
+      "refName": "hbase-MASTER-BASE",
+      "roleType": "MASTER",
+      "configs": [],
+      "base": true
+    }, {
+      "refName": "hbase-REGIONSERVER-BASE",
+      "roleType": "REGIONSERVER",
+      "configs": [],
+      "base": true
+    }, {
+      "refName": "hbase-HBASETHRIFTSERVER-BASE",
+      "roleType": "HBASETHRIFTSERVER",
+      "configs": [],
+      "base": true
+    }
+  ]
+}

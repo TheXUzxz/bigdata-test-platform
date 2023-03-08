@@ -1,0 +1,43 @@
+---
+
+- name: Install dependencies
+  yum:
+    name: "{{ item }}"
+    state: installed
+    disablerepo: "*"
+    enablerepo: "thexu-locally"
+  with_items:
+    - mariadb-server
+    - MySQL-python
+
+- name: Config mariadb
+  template:
+    src: my.conf.j2
+    dest: /etc/my.cnf
+  notify:
+    - Restart mariadb
+  
+- name: Create MariaDB log file
+  file:
+    path: "{{ mysql.path.log }}"
+    state: touch
+    owner: mysql
+    group: mysql
+    mode: 0775
+
+- name: Create MariaDB PID directory
+  file:
+    path: "{{ mysql.path.pid_dir }}"
+    state: directory
+    owner: mysql
+    group: mysql
+    mode: 0775
+
+- name: Ensure mariadb started
+  service:
+    name: mariadb
+    state: started
+    enabled: yes
+
+- include: mysql_security.yml
+- include: mysql_databases.yml

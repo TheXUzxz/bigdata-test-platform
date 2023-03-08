@@ -1,0 +1,64 @@
+---
+
+- name: Create hosts file in locally
+  hosts: locally
+  any_errors_fatal: True
+  become: yes
+  roles:
+    - hosts
+
+- name: Create hosts file
+  hosts: cdh_cluster
+  any_errors_fatal: True
+  become: yes
+  roles:
+    - hosts
+
+- name: Set yum locally
+  hosts: cdh_cluster
+  any_errors_fatal: True
+  become: yes
+  roles:
+    - yum_locally
+
+- name: Apply CentOS 7 common config role
+  hosts: cdh_cluster
+  any_errors_fatal: True
+  become: yes
+  roles:
+    - centos_common
+
+- name: Install java
+  hosts: cdh_cluster
+  any_errors_fatal: True
+  become: yes
+  roles:
+    - java
+
+- name: Install mysql
+  hosts: db_server
+  any_errors_fatal: True
+  become: yes
+  roles:
+    - mysql
+
+- name: Install cloudera agents
+  hosts: cdh_cluster
+  any_errors_fatal: True
+  become: yes
+  roles:
+    - scm_agents
+
+- name: Install cloudera agents
+  hosts: scm_server
+  any_errors_fatal: True
+  become: yes
+  roles:
+    - scm_server
+
+- name: Install cdh
+  hosts: scm_server
+  any_errors_fatal: True
+  become: yes
+  roles:
+    - cdh

@@ -1,0 +1,117 @@
+common:
+  path:
+    temp_install: /temp/cloudera_install
+  locale: zh_CN.utf8
+  timezone: Asia/Shanghai
+
+cloudera:
+  config:
+    db_type: mysql
+    scm_hostname: "{{ hostvars[groups['scm_server'][0]]['inventory_hostname'] }}"
+    db_hostname: "{{ hostvars[groups['db_server'][0]]['inventory_hostname'] }}"
+    scm_port: 7180
+    scm_default_user: admin
+    scm_default_password: admin
+    cluster_display_name: cluster_1
+    cdh_version: 6.3.2
+    cm_version: 6.3.1
+    product_version: "6.3.2-1.cdh6.3.2.p0.1605554"
+    product_name: "CDH"
+    scm_repo_url: https://archive.cloudera.com/cm6/6.3.1/redhat7/yum/
+    scm_repo_gpgkey: https://archive.cloudera.com/cm6/6.3.1/redhat7/yum/RPM-GPG-KEY-cloudera
+  parcels:
+    - /vagrant/pkgs/cloudera_manager/CDH-6.3.2-1.cdh6.3.2.p0.1605554-el7.parcel
+    - /vagrant/pkgs/cloudera_manager/CDH-6.3.2-1.cdh6.3.2.p0.1605554-el7.parcel.sha
+  parcel_meta: file:///vagrant/pkgs/cloudera_manager/manifest.json
+  services:
+    - type: hbase
+    - type: hdfs
+      dfs_data_dir_list: /dfs/dn
+      fs_checkpoint_dir_list: /dfs/snn
+      dfs_name_dir_list: /dfs/nn
+      dfs_journalnode_edits_dir: /dfs/jn
+    - type: hive
+    - type: hue
+    - type: oozie
+    - type: solr
+    # - type: sentry
+    - type: spark_on_yarn
+    - type: yarn
+      yarn_nodemanager_local_dirs: /tmp/nm
+      yarn_nodemanager_log_dirs: /var/log/nm
+    - type: zookeeper
+
+
+mysql:
+  path:
+    pkgs_connector: /vagrant/pkgs/mysql-connector-java-5.1.48.zip
+    data: /var/lib/mysql
+    socket: /var/lib/mysql/mysql.sock
+    log: /var/log/mariadb/mariadb.log
+    log_bin: /var/lib/mysql/mysql_binary_log
+    pid_dir: /var/run/mariadb
+    pid_file: /var/run/mariadb/mariadb.pid
+  config:
+    port: 3306
+    log_buffer_size: 16M
+    buffer_pool_size: 200M
+    root_password: thexumysqlroot
+
+database_type: mysql
+
+databases:
+  scm:
+    name: 'scm'
+    user: 'scm'
+    pass: 'scm_password'
+    type: '{{ database_type }}'
+  amon:
+    name: 'amon'
+    user: 'amon'
+    pass: 'amon_password'
+    type: '{{ database_type }}'
+  rman:
+    name: 'rman'
+    user: 'rman'
+    pass: 'rman_password'
+    type: '{{ database_type }}'
+  nav:
+    name: 'nav'
+    user: 'nav'
+    pass: 'nav_password'
+    type: '{{ database_type }}'
+  navms:
+    name: 'navms'
+    user: 'navms'
+    pass: 'navms_password'
+    type: '{{ database_type }}'
+  metastore:
+    name: 'metastore'
+    user: 'hive'
+    pass: 'hive_password'
+    type: '{{ database_type }}'
+  sentry:
+    name: 'sentry'
+    user: 'sentry'
+    pass: 'sentry_password'
+    type: '{{ database_type }}'
+  hue:
+    name: 'hue'
+    user: 'hue'
+    pass: 'hue_password'
+    type: '{{ database_type }}'
+  oozie:
+    name: 'oozie'
+    user: 'oozie'
+    pass: 'oozie_password'
+    type: '{{ database_type }}'
+  das:
+    name: 'das'
+    user: 'das'
+    pass: 'das_password'
+    type: '{{ database_type }}'
+  ranger:
+    name: 'ranger'
+    user: 'ranger'
+    pass: 'ranger_password'
+    type: '{{ database_type }}'

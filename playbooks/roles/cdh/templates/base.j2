@@ -1,0 +1,20 @@
+{
+  "cdhVersion" : "{{ cloudera.config.cdh_version }}",
+  "displayName" : "{{ cloudera.config.cluster_display_name }}",
+  "cmVersion" : "{{ cloudera.config.cm_version }}",
+  "products" : [
+    {
+      "product" : "{{ cloudera.config.product_name }}",
+      "version" : "{{ cloudera.config.product_version }}"
+    }
+  ],
+  "services" : [
+    {% set serv_j = joiner(",") %}
+    {% for service in cloudera.services %}
+    {{ serv_j() }}
+    {% set t = service['type'] + '.j2' %}{% include t %}
+    {% endfor %}
+  ],
+  "hostTemplates" : {% include 'host.j2' %},
+  "instantiator" : {% include 'instantiator.j2' %}
+}

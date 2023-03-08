@@ -1,0 +1,9 @@
+---
+
+- name: Show inventory var
+  debug: var={{ groups['cdh_cluster'] }}
+
+- name: Set hosts file
+  template:
+    src: hosts.j2
+    dest: /etc/hosts

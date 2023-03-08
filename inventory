@@ -1,0 +1,20 @@
+[master_servers]
+master01 host_template=HostTemplate-Master ansible_host=192.168.56.101 ansible_user=vagrant ansible_ssh_pass=vagrant
+
+[worker_servers]
+worker01 host_template=HostTemplate-Workers ansible_host=192.168.56.102 ansible_user=vagrant ansible_ssh_pass=vagrant
+worker02 host_template=HostTemplate-Workers ansible_host=192.168.56.103 ansible_user=vagrant ansible_ssh_pass=vagrant
+
+[db_server]
+master01 ansible_host=192.168.56.101 ansible_user=vagrant ansible_ssh_pass=vagrant
+
+[scm_server]
+master01 ansible_host=192.168.56.101 ansible_user=vagrant ansible_ssh_pass=vagrant
+
+[cdh_cluster]
+master01 ansible_host=192.168.56.101 ansible_user=vagrant ansible_ssh_pass=vagrant
+worker01 ansible_host=192.168.56.102 ansible_user=vagrant ansible_ssh_pass=vagrant
+worker02 ansible_host=192.168.56.103 ansible_user=vagrant ansible_ssh_pass=vagrant
+
+[locally]
+127.0.0.1 ansible_connection=local

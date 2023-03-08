@@ -1,0 +1,4 @@
+---
+
+- name: Set timezone
+  command: timedatectl set-timezone {{ common.timezone }}

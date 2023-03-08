@@ -1,0 +1,902 @@
+{
+  "cdhVersion": "6.3.2",
+  "displayName": "cluster_1",
+  "cmVersion": "6.3.1",
+  "repositories": [
+    "https://archive.cloudera.com/cdh6/{latest_supported}/parcels/",
+    "https://archive.cloudera.com/cdh5/parcels/5.16/",
+    "https://parcels.repos.intel.com/mkl/latest",
+    "https://archive.cloudera.com/accumulo-c5/parcels/latest/",
+    "https://archive.cloudera.com/accumulo6/6.1/parcels/",
+    "https://archive.cloudera.com/kafka/parcels/latest/",
+    "http://archive.cloudera.com/kudu/parcels/latest/",
+    "https://archive.cloudera.com/spark/parcels/latest/",
+    "https://archive.cloudera.com/sqoop-teradata-connector1/latest/",
+    "https://archive.cloudera.com/sqoop-connectors/parcels/latest/",
+    "https://archive.cloudera.com/sqoop-netezza-connector1/latest/"
+  ],
+  "products": [
+    {
+      "version": "6.3.2-1.cdh6.3.2.p0.1605554",
+      "product": "CDH"
+    }
+  ],
+  "services": [
+    {
+      "refName": "hive",
+      "serviceType": "HIVE",
+      "serviceConfigs": [
+        {
+          "name": "hive_metastore_database_user",
+          "variable": "hive-hive_metastore_database_user"
+        },
+        {
+          "name": "mapreduce_yarn_service",
+          "ref": "yarn"
+        },
+        {
+          "name": "hive_metastore_database_password",
+          "variable": "hive-hive_metastore_database_password"
+        },
+        {
+          "name": "zookeeper_service",
+          "ref": "zookeeper",
+          "autoConfig": true
+        },
+        {
+          "name": "hive_metastore_database_host",
+          "variable": "hive-hive_metastore_database_host"
+        },
+        {
+          "name": "hbase_service",
+          "ref": "hbase",
+          "autoConfig": true
+        },
+        {
+          "name": "hive_metastore_database_type",
+          "variable": "hive-hive_metastore_database_type"
+        },
+        {
+          "name": "hive_metastore_database_name",
+          "variable": "hive-hive_metastore_database_name"
+        },
+        {
+          "name": "spark_on_yarn_service",
+          "ref": "spark_on_yarn"
+        }
+      ],
+      "roleConfigGroups": [
+        {
+          "refName": "hive-GATEWAY-BASE",
+          "roleType": "GATEWAY",
+          "base": true
+        },
+        {
+          "refName": "hive-HIVESERVER2-BASE",
+          "roleType": "HIVESERVER2",
+          "configs": [
+            {
+              "name": "hiveserver2_spark_yarn_executor_memory_overhead",
+              "value": "153",
+              "autoConfig": true
+            },
+            {
+              "name": "hiveserver2_spark_driver_memory",
+              "value": "966367641",
+              "autoConfig": true
+            },
+            {
+              "name": "hiveserver2_java_heapsize",
+              "value": "128974848",
+              "autoConfig": true
+            },
+            {
+              "name": "hiveserver2_enable_impersonation",
+              "value": "false"
+            },
+            {
+              "name": "hiveserver2_spark_executor_cores",
+              "value": "1",
+              "autoConfig": true
+            },
+            {
+              "name": "hiveserver2_spark_yarn_driver_memory_overhead",
+              "value": "102",
+              "autoConfig": true
+            },
+            {
+              "name": "hiveserver2_spark_executor_memory",
+              "value": "912680550",
+              "autoConfig": true
+            }
+          ],
+          "base": true
+        },
+        {
+          "refName": "hive-HIVEMETASTORE-BASE",
+          "roleType": "HIVEMETASTORE",
+          "configs": [
+            {
+              "name": "hive_metastore_server_max_message_size",
+              "value": "104857600",
+              "autoConfig": true
+            },
+            {
+              "name": "hive_metastore_delegation_token_store",
+              "value": "org.apache.hadoop.hive.thrift.DBTokenStore"
+            },
+            {
+              "name": "hive_enable_db_notification",
+              "value": "true"
+            },
+            {
+              "name": "hive_metastore_java_heapsize",
+              "value": "128974848",
+              "autoConfig": true
+            }
+          ],
+          "base": true
+        }
+      ]
+    },
+    {
+      "refName": "spark_on_yarn",
+      "serviceType": "SPARK_ON_YARN",
+      "serviceConfigs": [
+        {
+          "name": "yarn_service",
+          "ref": "yarn"
+        },
+        {
+          "name": "hbase_service",
+          "ref": "hbase",
+          "autoConfig": true
+        }
+      ],
+      "roleConfigGroups": [
+        {
+          "refName": "spark_on_yarn-SPARK_YARN_HISTORY_SERVER-BASE",
+          "roleType": "SPARK_YARN_HISTORY_SERVER",
+          "configs": [
+            {
+              "name": "history_server_max_heapsize",
+              "value": "167772160",
+              "autoConfig": true
+            }
+          ],
+          "base": true
+        },
+        {
+          "refName": "spark_on_yarn-GATEWAY-BASE",
+          "roleType": "GATEWAY",
+          "base": true
+        }
+      ]
+    },
+    {
+      "refName": "zookeeper",
+      "serviceType": "ZOOKEEPER",
+      "serviceConfigs": [
+        {
+          "name": "zookeeper_datadir_autocreate",
+          "value": "true"
+        }
+      ],
+      "roleConfigGroups": [
+        {
+          "refName": "zookeeper-SERVER-BASE",
+          "roleType": "SERVER",
+          "configs": [
+            {
+              "name": "maxSessionTimeout",
+              "value": "60000",
+              "autoConfig": true
+            },
+            {
+              "name": "zookeeper_server_java_heapsize",
+              "value": "128974848",
+              "autoConfig": true
+            }
+          ],
+          "base": true
+        }
+      ]
+    },
+    {
+      "refName": "oozie",
+      "serviceType": "OOZIE",
+      "serviceConfigs": [
+        {
+          "name": "oozie_upload_sharelib_cmd_timeout",
+          "value": "540"
+        },
+        {
+          "name": "hive_service",
+          "ref": "hive"
+        },
+        {
+          "name": "spark_on_yarn_service",
+          "ref": "spark_on_yarn"
+        },
+        {
+          "name": "mapreduce_yarn_service",
+          "ref": "yarn"
+        },
+        {
+          "name": "zookeeper_service",
+          "ref": "zookeeper"
+        }
+      ],
+      "roleConfigGroups": [
+        {
+          "refName": "oozie-OOZIE_SERVER-BASE",
+          "roleType": "OOZIE_SERVER",
+          "configs": [
+            {
+              "name": "oozie_launcher_default_memory",
+              "value": "500"
+            },
+            {
+              "name": "oozie_workflow_extension_schemas",
+              "value": ",ssh-action-0.1.xsd,hive-action-0.3.xsd,sqoop-action-0.3.xsd,shell-action-0.2.xsd,shell-action-0.1.xsd"
+            },
+            {
+              "name": "oozie_database_type",
+              "variable": "oozie-OOZIE_SERVER-BASE-oozie_database_type"
+            },
+            {
+              "name": "oozie_database_password",
+              "variable": "oozie-OOZIE_SERVER-BASE-oozie_database_password"
+            },
+            {
+              "name": "oozie_config_safety_valve",
+              "value": "\n<property>\n<name>oozie.action.launcher.mapreduce.job.ubertask.enable</name>\n<value>false</value>\n</property>"
+            },
+            {
+              "name": "oozie_java_heapsize",
+              "value": "128974848",
+              "autoConfig": true
+            },
+            {
+              "name": "oozie_database_user",
+              "variable": "oozie-OOZIE_SERVER-BASE-oozie_database_user"
+            },
+            {
+              "name": "oozie_database_host",
+              "variable": "oozie-OOZIE_SERVER-BASE-oozie_database_host"
+            },
+            {
+              "name": "oozie_database_name",
+              "variable": "oozie-OOZIE_SERVER-BASE-oozie_database_name"
+            }
+          ],
+          "base": true
+        }
+      ]
+    },
+    {
+      "refName": "solr",
+      "serviceType": "SOLR",
+      "serviceConfigs": [
+        {
+          "name": "hdfs_service",
+          "ref": "hdfs",
+          "autoConfig": true
+        },
+        {
+          "name": "zookeeper_service",
+          "ref": "zookeeper",
+          "autoConfig": true
+        }
+      ],
+      "roleConfigGroups": [
+        {
+          "refName": "solr-SOLR_SERVER-BASE",
+          "roleType": "SOLR_SERVER",
+          "configs": [
+            {
+              "name": "solr_java_heapsize",
+              "value": "209715200",
+              "autoConfig": true
+            },
+            {
+              "name": "solr_java_direct_memory_size",
+              "value": "268435456",
+              "autoConfig": true
+            }
+          ],
+          "base": true
+        }
+      ]
+    },
+    {
+      "refName": "hdfs",
+      "serviceType": "HDFS",
+      "serviceConfigs": [
+        {
+          "name": "hadoop_security_authentication",
+          "value": "simple"
+        },
+        {
+          "name": "dfs_permissions",
+          "value": "false"
+        },
+        {
+          "name": "hadoop_security_authorization",
+          "value": "true"
+        },
+        {
+          "name": "zookeeper_service",
+          "ref": "zookeeper",
+          "autoConfig": true
+        },
+        {
+          "name": "dfs_namenode_acls_enabled",
+          "value": "true"
+        }
+      ],
+      "roleConfigGroups": [
+        {
+          "refName": "hdfs-NAMENODE-BASE",
+          "roleType": "NAMENODE",
+          "configs": [
+            {
+              "name": "dfs_namenode_servicerpc_address",
+              "value": "8022",
+              "autoConfig": true
+            },
+            {
+              "name": "dfs_namenode_service_handler_count",
+              "value": "30",
+              "autoConfig": true
+            },
+            {
+              "name": "dfs_namenode_handler_count",
+              "value": "30",
+              "autoConfig": true
+            },
+            {
+              "name": "dfs_name_dir_list",
+              "variable": "hdfs-NAMENODE-BASE-dfs_name_dir_list"
+            },
+            {
+              "name": "namenode_java_heapsize",
+              "value": "128974848",
+              "autoConfig": true
+            }
+          ],
+          "base": true
+        },
+        {
+          "refName": "hdfs-SECONDARYNAMENODE-BASE",
+          "roleType": "SECONDARYNAMENODE",
+          "configs": [
+            {
+              "name": "fs_checkpoint_dir_list",
+              "variable": "hdfs-SECONDARYNAMENODE-BASE-fs_checkpoint_dir_list"
+            },
+            {
+              "name": "secondary_namenode_java_heapsize",
+              "value": "128974848",
+              "autoConfig": true
+            }
+          ],
+          "base": true
+        },
+        {
+          "refName": "hdfs-DATANODE-BASE",
+          "roleType": "DATANODE",
+          "configs": [
+            {
+              "name": "dfs_datanode_failed_volumes_tolerated",
+              "value": "0",
+              "autoConfig": true
+            },
+            {
+              "name": "datanode_java_heapsize",
+              "value": "71303168",
+              "autoConfig": true
+            },
+            {
+              "name": "dfs_datanode_du_reserved",
+              "value": "4292765696",
+              "autoConfig": true
+            },
+            {
+              "name": "dfs_datanode_max_locked_memory",
+              "value": "93323264",
+              "autoConfig": true
+            },
+            {
+              "name": "dfs_data_dir_list",
+              "value": "/dfs/dn"
+            }
+          ],
+          "base": true
+        },
+        {
+          "refName": "hdfs-BALANCER-BASE",
+          "roleType": "BALANCER",
+          "configs": [
+            {
+              "name": "balancer_java_heapsize",
+              "value": "128974848",
+              "autoConfig": true
+            }
+          ],
+          "base": true
+        },
+        {
+          "refName": "hdfs-DATANODE",
+          "roleType": "DATANODE",
+          "configs": [
+            {
+              "name": "dfs_datanode_failed_volumes_tolerated",
+              "value": "0",
+              "autoConfig": true
+            },
+            {
+              "name": "datanode_java_heapsize",
+              "value": "128974848",
+              "autoConfig": true
+            },
+            {
+              "name": "dfs_datanode_max_locked_memory",
+              "value": "167772160",
+              "autoConfig": true
+            },
+            {
+              "name": "dfs_datanode_du_reserved",
+              "value": "4292765696",
+              "autoConfig": true
+            },
+            {
+              "name": "dfs_data_dir_list",
+              "value": "/dfs/dn"
+            }
+          ],
+          "base": false
+        }
+      ],
+      "roles": [
+        {
+          "refName": "hdfs-NAMENODE-3a3ce9d472fc81407be6277fdd642818",
+          "roleType": "NAMENODE"
+        }
+      ]
+    },
+    {
+      "refName": "yarn",
+      "serviceType": "YARN",
+      "serviceConfigs": [
+        {
+          "name": "cm_yarn_container_usage_job_user",
+          "value": "cmjobuser"
+        },
+        {
+          "name": "cm_yarn_enable_container_usage_aggregation",
+          "value": "true"
+        },
+        {
+          "name": "hdfs_service",
+          "ref": "hdfs"
+        },
+        {
+          "name": "zookeeper_service",
+          "ref": "zookeeper",
+          "autoConfig": true
+        },
+        {
+          "name": "hadoop_secure_web_ui",
+          "value": "true"
+        }
+      ],
+      "roleConfigGroups": [
+        {
+          "refName": "yarn-RESOURCEMANAGER-BASE",
+          "roleType": "RESOURCEMANAGER",
+          "configs": [
+            {
+              "name": "yarn_scheduler_maximum_allocation_vcores",
+              "value": "1",
+              "autoConfig": true
+            },
+            {
+              "name": "yarn_scheduler_minimum_allocation_mb",
+              "value": "200"
+            },
+            {
+              "name": "yarn_scheduler_maximum_allocation_mb",
+              "value": "2048"
+            },
+            {
+              "name": "resource_manager_java_heapsize",
+              "value": "128974848",
+              "autoConfig": true
+            }
+          ],
+          "base": true
+        },
+        {
+          "refName": "yarn-NODEMANAGER-BASE",
+          "roleType": "NODEMANAGER",
+          "configs": [
+            {
+              "name": "yarn_nodemanager_resource_memory_mb",
+              "value": "2048"
+            },
+            {
+              "name": "yarn_nodemanager_heartbeat_interval_ms",
+              "value": "100",
+              "autoConfig": true
+            },
+            {
+              "name": "yarn_nodemanager_local_dirs",
+              "variable": "yarn-NODEMANAGER-BASE-yarn_nodemanager_local_dirs"
+            },
+            {
+              "name": "yarn_nodemanager_resource_cpu_vcores",
+              "value": "2"
+            },
+            {
+              "name": "yarn_nodemanager_log_dirs",
+              "variable": "yarn-NODEMANAGER-BASE-yarn_nodemanager_log_dirs"
+            },
+            {
+              "name": "node_manager_java_heapsize",
+              "value": "71303168",
+              "autoConfig": true
+            }
+          ],
+          "base": true
+        },
+        {
+          "refName": "yarn-NODEMANAGER",
+          "roleType": "NODEMANAGER",
+          "configs": [
+            {
+              "name": "yarn_nodemanager_resource_memory_mb",
+              "value": "2048"
+            },
+            {
+              "name": "yarn_nodemanager_heartbeat_interval_ms",
+              "value": "100",
+              "autoConfig": true
+            },
+            {
+              "name": "yarn_nodemanager_local_dirs",
+              "variable": "yarn-NODEMANAGER-yarn_nodemanager_local_dirs"
+            },
+            {
+              "name": "yarn_nodemanager_resource_cpu_vcores",
+              "value": "2"
+            },
+            {
+              "name": "yarn_nodemanager_log_dirs",
+              "variable": "yarn-NODEMANAGER-yarn_nodemanager_log_dirs"
+            },
+            {
+              "name": "node_manager_java_heapsize",
+              "value": "128974848",
+              "autoConfig": true
+            }
+          ],
+          "base": false
+        },
+        {
+          "refName": "yarn-JOBHISTORY-BASE",
+          "roleType": "JOBHISTORY",
+          "configs": [
+            {
+              "name": "mr2_jobhistory_java_heapsize",
+              "value": "128974848",
+              "autoConfig": true
+            }
+          ],
+          "base": true
+        }
+      ]
+    },
+    {
+      "refName": "hbase",
+      "serviceType": "HBASE",
+      "serviceConfigs": [
+        {
+          "name": "zookeeper_service",
+          "ref": "zookeeper",
+          "autoConfig": true
+        },
+        {
+          "name": "hdfs_service",
+          "ref": "hdfs"
+        }
+      ],
+      "roleConfigGroups": [
+        {
+          "refName": "hbase-REGIONSERVER-BASE",
+          "roleType": "REGIONSERVER",
+          "configs": [
+            {
+              "name": "hbase_bucketcache_size",
+              "value": "89",
+              "autoConfig": true
+            },
+            {
+              "name": "hbase_regionserver_java_heapsize",
+              "value": "71303168",
+              "autoConfig": true
+            }
+          ],
+          "base": true
+        },
+        {
+          "refName": "hbase-MASTER-BASE",
+          "roleType": "MASTER",
+          "configs": [
+            {
+              "name": "hbase_master_java_heapsize",
+              "value": "128974848",
+              "autoConfig": true
+            }
+          ],
+          "base": true
+        },
+        {
+          "refName": "hbase-HBASETHRIFTSERVER-BASE",
+          "roleType": "HBASETHRIFTSERVER",
+          "configs": [
+            {
+              "name": "hbase_thriftserver_java_heapsize",
+              "value": "128974848",
+              "autoConfig": true
+            }
+          ],
+          "base": true
+        },
+        {
+          "refName": "hbase-REGIONSERVER-1",
+          "roleType": "REGIONSERVER",
+          "configs": [
+            {
+              "name": "hbase_bucketcache_size",
+              "value": "160",
+              "autoConfig": true
+            },
+            {
+              "name": "hbase_regionserver_java_heapsize",
+              "value": "128974848",
+              "autoConfig": true
+            }
+          ],
+          "base": false
+        }
+      ],
+      "roles": [
+        {
+          "refName": "hbase-HBASETHRIFTSERVER-3a3ce9d472fc81407be6277fdd642818",
+          "roleType": "HBASETHRIFTSERVER"
+        }
+      ]
+    },
+    {
+      "refName": "hue",
+      "serviceType": "HUE",
+      "serviceConfigs": [
+        {
+          "name": "hue_webhdfs",
+          "ref": "hdfs-NAMENODE-3a3ce9d472fc81407be6277fdd642818",
+          "autoConfig": true
+        },
+        {
+          "name": "database_type",
+          "variable": "hue-database_type"
+        },
+        {
+          "name": "hive_service",
+          "ref": "hive"
+        },
+        {
+          "name": "hue_hbase_thrift",
+          "ref": "hbase-HBASETHRIFTSERVER-3a3ce9d472fc81407be6277fdd642818",
+          "autoConfig": true
+        },
+        {
+          "name": "database_password",
+          "variable": "hue-database_password"
+        },
+        {
+          "name": "database_host",
+          "variable": "hue-database_host"
+        },
+        {
+          "name": "solr_service",
+          "ref": "solr"
+        },
+        {
+          "name": "oozie_service",
+          "ref": "oozie"
+        },
+        {
+          "name": "hbase_service",
+          "ref": "hbase"
+        },
+        {
+          "name": "zookeeper_service",
+          "ref": "zookeeper"
+        }
+      ],
+      "roleConfigGroups": [
+        {
+          "refName": "hue-HUE_SERVER-BASE",
+          "roleType": "HUE_SERVER",
+          "base": true
+        }
+      ]
+    }
+  ],
+  "hostTemplates": [
+    {
+      "refName": "HostTemplate-0-from-worker[01-02]",
+      "cardinality": 2,
+      "roleConfigGroupsRefNames": [
+        "hbase-REGIONSERVER-BASE",
+        "hdfs-DATANODE-BASE",
+        "hive-GATEWAY-BASE",
+        "spark_on_yarn-GATEWAY-BASE",
+        "yarn-NODEMANAGER-BASE"
+      ]
+    },
+    {
+      "refName": "HostTemplate-1-from-master01",
+      "cardinality": 1,
+      "roleConfigGroupsRefNames": [
+        "hbase-HBASETHRIFTSERVER-BASE",
+        "hbase-MASTER-BASE",
+        "hbase-REGIONSERVER-1",
+        "hdfs-BALANCER-BASE",
+        "hdfs-DATANODE",
+        "hdfs-NAMENODE-BASE",
+        "hdfs-SECONDARYNAMENODE-BASE",
+        "hive-GATEWAY-BASE",
+        "hive-HIVEMETASTORE-BASE",
+        "hive-HIVESERVER2-BASE",
+        "hue-HUE_SERVER-BASE",
+        "oozie-OOZIE_SERVER-BASE",
+        "solr-SOLR_SERVER-BASE",
+        "spark_on_yarn-GATEWAY-BASE",
+        "spark_on_yarn-SPARK_YARN_HISTORY_SERVER-BASE",
+        "yarn-JOBHISTORY-BASE",
+        "yarn-NODEMANAGER",
+        "yarn-RESOURCEMANAGER-BASE",
+        "zookeeper-SERVER-BASE"
+      ]
+    },
+    {
+      "refName": "HostTemplate-2-from-edge",
+      "cardinality": 1,
+      "roleConfigGroupsRefNames": [
+        "hive-GATEWAY-BASE",
+        "spark_on_yarn-GATEWAY-BASE"
+      ]
+    }
+  ],
+  "instantiator": {
+    "clusterName": "<changeme>",
+    "hosts": [
+      {
+        "hostName": "<changeme>",
+        "hostTemplateRefName": "<changeme>",
+        "roleRefNames": [
+          "hbase-HBASETHRIFTSERVER-3a3ce9d472fc81407be6277fdd642818"
+        ]
+      },
+      {
+        "hostName": "<changeme>",
+        "hostTemplateRefName": "<changeme>",
+        "roleRefNames": [
+          "hdfs-NAMENODE-3a3ce9d472fc81407be6277fdd642818"
+        ]
+      },
+      {
+        "hostName": "<changeme>",
+        "hostTemplateRefName": "<changeme>"
+      },
+      {
+        "hostNameRange": "<HOST[0001-0002]>",
+        "hostTemplateRefName": "<changeme>"
+      }
+    ],
+    "variables": [
+      {
+        "name": "hdfs-NAMENODE-BASE-dfs_name_dir_list",
+        "value": "/dfs/nn"
+      },
+      {
+        "name": "hdfs-SECONDARYNAMENODE-BASE-fs_checkpoint_dir_list",
+        "value": "/dfs/snn"
+      },
+      {
+        "name": "hive-hive_metastore_database_host",
+        "value": "master01"
+      },
+      {
+        "name": "hive-hive_metastore_database_name",
+        "value": "metastore"
+      },
+      {
+        "name": "hive-hive_metastore_database_password",
+        "value": "<changeme>"
+      },
+      {
+        "name": "hive-hive_metastore_database_type",
+        "value": "mysql"
+      },
+      {
+        "name": "hive-hive_metastore_database_user",
+        "value": "hive"
+      },
+      {
+        "name": "hue-database_host",
+        "value": "master01"
+      },
+      {
+        "name": "hue-database_password",
+        "value": "<changeme>"
+      },
+      {
+        "name": "hue-database_type",
+        "value": "mysql"
+      },
+      {
+        "name": "oozie-OOZIE_SERVER-BASE-oozie_database_host",
+        "value": "master01"
+      },
+      {
+        "name": "oozie-OOZIE_SERVER-BASE-oozie_database_name",
+        "value": "oozie"
+      },
+      {
+        "name": "oozie-OOZIE_SERVER-BASE-oozie_database_password",
+        "value": "<changeme>"
+      },
+      {
+        "name": "oozie-OOZIE_SERVER-BASE-oozie_database_type",
+        "value": "mysql"
+      },
+      {
+        "name": "oozie-OOZIE_SERVER-BASE-oozie_database_user",
+        "value": "oozie"
+      },
+      {
+        "name": "yarn-NODEMANAGER-BASE-yarn_nodemanager_local_dirs",
+        "value": "/tmp/nm"
+      },
+      {
+        "name": "yarn-NODEMANAGER-BASE-yarn_nodemanager_log_dirs",
+        "value": "/var/log/nm"
+      },
+      {
+        "name": "yarn-NODEMANAGER-yarn_nodemanager_local_dirs",
+        "value": "/tmp/nm"
+      },
+      {
+        "name": "yarn-NODEMANAGER-yarn_nodemanager_log_dirs",
+        "value": "/var/log/nm"
+      }
+    ],
+    "roleConfigGroups": [
+      {
+        "rcgRefName": "hdfs-DATANODE",
+        "name": ""
+      },
+      {
+        "rcgRefName": "yarn-NODEMANAGER",
+        "name": ""
+      },
+      {
+        "rcgRefName": "hbase-REGIONSERVER-1",
+        "name": ""
+      }
+    ]
+  }
+}

@@ -1,0 +1,21 @@
+---
+
+- name: Install rng-tools is installed, to generate random number in kernel
+  yum:
+    name: rng-tools
+    state: installed
+    disablerepo: "*"
+    enablerepo: "thexu-locally"
+  
+- name: Create rngd configuration file
+  template:
+    src: rngd.service.j2
+    dest: /etc/systemd/system/rngd.service
+  notify:
+    - Restart rngd
+
+- name: Ensure rngd is running
+  service:
+    name: rngd
+    state: started
+    enabled: yes

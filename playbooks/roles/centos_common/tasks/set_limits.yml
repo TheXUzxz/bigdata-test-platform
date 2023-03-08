@@ -1,0 +1,51 @@
+- name: Set nofile limits, 句柄限制
+  lineinfile:
+    dest: /etc/security/limits.conf
+    insertbefore: "^# End of file"
+    state: present
+    line: "{{ item }}"
+  with_items:
+    - "* soft nofile 32768"
+    - "* hard nofile 32768"
+
+- name: Set nproc limits, 进程限制
+  lineinfile:
+    dest: /etc/security/limits.d/90-nproc.conf
+    insertafter: EOF
+    state: present
+    create: yes
+    line: "{{ item }}"
+    mode: 0644
+  with_items:
+    - "* soft nproc 32768"
+    - "* hard nproc 32768"
+
+- name: Set swappiness, 交换空间使用比例
+  sysctl:
+    name: vm.swappiness
+    value: '1'
+    state: present
+    ignoreerrors: true
+
+- name: Set the tuned profile, 在 Tuned 中禁用 HugePages
+  copy: 
+    src: tuned.conf
+    dest: /etc/tuned/hadoop/
+    mode: 0755
+  when: ansible_os_family == "CentOS" and ansible_distribution_major_version == "7"
+
+- name: Activate the tuned profile
+  shell: tuned-adm profile hadoop
+  when: ansible_os_family == "CentOS" and ansible_distribution_major_version == "7"
+
+- name: Disable Transparent Huge Pages in Grub 2
+  lineinfile:
+    dest: /etc/default/grub
+    state: present
+    line: 'GRUB_CMDLINE_LINUX=$GRUB_CMDLINE_LINUX" transparent_hugepage=never"'
+  when: ansible_distribution_major_version|int > 6
+  notify: Run update-grub
+
+- name: Disable Transparent Huge Pages until reboot
+  shell: echo never > /sys/kernel/mm/transparent_hugepage/enabled && echo never > /sys/kernel/mm/transparent_hugepage/defrag
+  ignore_errors: true

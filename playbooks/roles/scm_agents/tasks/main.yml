@@ -1,0 +1,26 @@
+---
+
+- name: Apply temporary workaround for Cloudera Manager issue OPSAPS-36322
+  include: 36322.yml
+
+- name: Install dependencies
+  yum:
+    name: "{{ item }}"
+    state: present
+    disablerepo: "*"
+    enablerepo: "thexu-locally"
+  with_items:
+    - cloudera-manager-agent
+    - cloudera-manager-daemons
+
+- name: Configure Cloudera Manager Agent 'server_host'
+  lineinfile:
+    dest: /etc/cloudera-scm-agent/config.ini
+    regexp: "^server_host"
+    line: "server_host={{ hostvars[cloudera.config.scm_hostname]['inventory_hostname'] }}"
+
+- name: Restart Cloudera Manager Agents
+  service:
+    name: cloudera-scm-agent
+    state: restarted
+    enabled: yes

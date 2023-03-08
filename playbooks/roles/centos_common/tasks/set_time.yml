@@ -1,0 +1,13 @@
+- name: Stop NTP service
+  service:
+    name: chronyd
+    state: stopped
+
+- name: Sync time
+  command: systemctl restart ntpdate
+
+- name: Start the NTP service
+  service:
+    name: chronyd
+    state: started
+    enabled: yes

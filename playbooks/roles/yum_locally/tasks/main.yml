@@ -1,0 +1,35 @@
+---
+
+- name: Keep yum repo cache
+  replace:
+    path: /etc/yum.conf
+    regexp: 'keepcache=0'
+    replace: 'keepcache=1'
+
+- name: Set yum repo locally
+  yum_repository:
+    name: thexu-locally
+    description: Local yum repo
+    baseurl: http://master01/
+    failovermethod: priority
+    file: thexu
+    gpgcheck: no
+    enabled: yes
+
+- name: Add Cloudera Manager yum repository
+  yum_repository:
+    name: cloudera-manager
+    description: Cloudera Manager
+    baseurl: "{{ cloudera.config.scm_repo_url }}"
+    gpgkey: "{{ cloudera.config.scm_repo_gpgkey }}"
+    gpgcheck: yes
+    enabled: yes
+
+# - name: Remove other repo
+#   shell: rm -rf {{ item }}
+#   with_items:
+#     - /etc/yum.repos.d/C*.repo
+#     - /etc/yum.repos.d/epel.repo
+
+- name: Clean yum meata
+  command: yum clean all

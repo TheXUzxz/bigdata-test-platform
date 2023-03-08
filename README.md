@@ -1,6 +1,6 @@
 ## 使用步骤
 
-1. `git clone http://git.thexu.cn/bigdata/testingcluster_bigdata_ansible.git`
+1. `git clone https://github.com/TheXUzxz/bigdata-test-platform.git`
 2. 下载 `https://pan.baidu.com/s/1mgRjKaxqVBFstB0F6QDz5A`, 在项目根目录下创建目录 `pkgs`, 并将下载的文件放入 `pkgs` 目录
 3. 自行下载 `Vagrant`, `VirtualBox` 最新版, 安装
 4. 安装 `Vagrant` 插件 `diskresize`, 使用命令 `vagrant plugin install vagrant-disksize`
